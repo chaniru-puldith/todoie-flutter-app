@@ -79,7 +79,7 @@ class _TaskScreenState extends State<TaskScreen> {
                         fontWeight: FontWeight.w700),
                   ),
                   Text(
-                    '${tasks.isEmpty ? 0 : tasks.length} Tasks',
+                    '${tasks.isEmpty ? 'No' : tasks.length} ${tasks.length == 1 ? 'Task' : 'Tasks'}',
                     style: const TextStyle(
                       color: Colors.white,
                       fontSize: 18.0,

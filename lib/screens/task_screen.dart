@@ -1,21 +1,30 @@
 import 'package:flutter/material.dart';
 import 'package:todoie/screens/add_task_screen.dart';
 import 'package:todoie/widgets/tasks_list.dart';
+import 'package:todoie/models/task.dart';
 
-class TaskScreen extends StatelessWidget {
+class TaskScreen extends StatefulWidget {
   const TaskScreen({super.key});
 
   @override
+  State<TaskScreen> createState() => _TaskScreenState();
+}
+
+class _TaskScreenState extends State<TaskScreen> {
+  List<Task> tasks = [];
+
+  @override
   Widget build(BuildContext context) {
+    print;
     return Scaffold(
       backgroundColor: Colors.purpleAccent,
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.purpleAccent,
-        child: Icon(Icons.add),
+        child: const Icon(Icons.add),
         onPressed: () {
           showModalBottomSheet(
             clipBehavior: Clip.antiAlias, // or hardEdge must
-            shape: RoundedRectangleBorder(
+            shape: const RoundedRectangleBorder(
               borderRadius: BorderRadius.only(
                 topLeft: Radius.circular(30),
                 topRight: Radius.circular(30),
@@ -26,7 +35,15 @@ class TaskScreen extends StatelessWidget {
               child: Container(
                 padding: EdgeInsets.only(
                     bottom: MediaQuery.of(context).viewInsets.bottom),
-                child: AddTaskScreen(),
+                child: AddTaskScreen(
+                  addTaskCallback: (newTaskTitle) {
+                    setState(() {
+                      tasks.add(Task(name: newTaskTitle));
+                    });
+
+                    Navigator.pop(context);
+                  },
+                ),
               ),
             ),
           );
@@ -42,19 +59,19 @@ class TaskScreen extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  CircleAvatar(
+                  const CircleAvatar(
+                    radius: 30.0,
+                    backgroundColor: Colors.white,
                     child: Icon(
                       Icons.list,
                       size: 30.0,
                       color: Colors.purpleAccent,
                     ),
-                    radius: 30.0,
-                    backgroundColor: Colors.white,
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 10.0,
                   ),
-                  Text(
+                  const Text(
                     'Todoie',
                     style: TextStyle(
                         color: Colors.white,
@@ -62,8 +79,8 @@ class TaskScreen extends StatelessWidget {
                         fontWeight: FontWeight.w700),
                   ),
                   Text(
-                    '12 Tasks',
-                    style: TextStyle(
+                    '${tasks.isEmpty ? 0 : tasks.length} Tasks',
+                    style: const TextStyle(
                       color: Colors.white,
                       fontSize: 18.0,
                     ),
@@ -73,16 +90,17 @@ class TaskScreen extends StatelessWidget {
             ),
             Expanded(
               child: Container(
-                padding: EdgeInsets.symmetric(vertical: 30.0, horizontal: 20.0),
+                padding: const EdgeInsets.symmetric(
+                    vertical: 30.0, horizontal: 20.0),
                 height: 300,
-                decoration: BoxDecoration(
+                decoration: const BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.only(
                     topRight: Radius.circular(30.0),
                     topLeft: Radius.circular(30.0),
                   ),
                 ),
-                child: TasksList(),
+                child: TasksList(tasks: tasks),
               ),
             ),
           ],
